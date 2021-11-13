@@ -7,7 +7,7 @@ public class HashTable {
     private Integer size;
 
     public HashTable(Integer size) {
-        p = new LinkedListHash[60];
+        p = new LinkedListHash[size];
         this.size = size;
     }
 
@@ -23,7 +23,11 @@ public class HashTable {
         if (p[hash(key)] == null) {
             p[hash(key)] = new LinkedListHash();
         }
-        p[hash(key)].insert(key,value); // TODO insert string not key
+        p[hash(key)].insert(key,value);
+    }
+
+    public void increaseKey(String key) {
+        p[hash(key)].insert(key,1);
     }
 
     public Integer findKey(String key) {
@@ -33,17 +37,36 @@ public class HashTable {
         return null;
     }
 
+    public void delete(String key) {
+        if (p[hash(key)] instanceof LinkedListHash) {
+            p[hash(key)].delete(key);
+        }
+    }
+
+    public void printTable() {
+        for (int i = 0; i<this.size;i++) {
+            System.out.print("Hash Key "+i+":");
+            if (p[i] != null) {
+                p[i].printList();
+            }
+            System.out.println("");
+        }
+    }
 
     public static void main(String[] args) {
-        HashTable h = new HashTable(80);
+        HashTable h = new HashTable(4);
         h.insert("pip",90);
-        h.insert("werwefwc",90);
-//        h.insert("pdsad",90);
-//        h.insert("xcvxz",90);
-//        h.insert("wefew-w",90);
-//        h.insert("wefws",90);
+        h.insert("werwefwc",190);
+        h.insert("pdsad",903);
+        h.insert("xcvxz",9230);
+        h.insert("wefew-w",120);
+        h.insert("wef!ws",50);
 
+        h.increaseKey("pip");
+        h.increaseKey("wed");
 
-        System.out.println(h.findKey("pip"));
+        h.delete("pdsad");
+        h.findKey("pip");
+        h.printTable();
     }
 }
