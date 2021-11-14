@@ -1,11 +1,17 @@
 package RedBlackTree;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 public class RBTree {
   Node root;
 
   public static class Node {
     int key;
-    Node left,right,parent;
+    Node left, right, parent;
     boolean color;
 
     public Node(int key) {
@@ -73,14 +79,12 @@ public class RBTree {
 
   public Node search(int key) {
     Node r = root;
-    while (r!=null) {
-      if (key>r.key) {
+    while (r != null) {
+      if (key > r.key) {
         r = r.right;
-      }
-      else if (key<r.key) {
+      } else if (key < r.key) {
         r = r.left;
-      }
-      else if (key==r.key){
+      } else if (key == r.key) {
         return r;
       }
     }
@@ -111,104 +115,52 @@ public class RBTree {
       p.left = n;
     }
 
-    // ADD FIX TO BALANCE fixBalance(n)
+    // ADD FIX TO BALANCE, balance(n)
     balance(n);
   }
 
-  private Node getUncle(Node parent) {
-    Node grandparent = parent.parent;
-    if (grandparent.left == parent) {
-      return grandparent.right;
-    } else if (grandparent.right == parent) {
-      return grandparent.left;
-    } else {
-      throw new IllegalStateException("Parent is not a child of its grandparent");
-    }
-  }
 
   private void balance(Node node) {
     Node parent = node.parent;
-
-    // Case 1: Parent is null, we've reached the root, the end of the recursion
-    if (parent == null) {
-      // Uncomment the following line if you want to enforce black roots (rule 2):
+    if (parent == null) { // This is the root node, make it black
       node.color = true;
       return;
     }
-
-    // Parent is black --> nothing to do
     if (parent.color == true) {
       return;
     }
-
-    // From here on, parent is red
     Node grandparent = parent.parent;
-
-    // Case 2:
-    // Not having a grandparent means that parent is the root. If we enforce black roots
-    // (rule 2), grandparent will never be null, and the following if-then block can be
-    // removed.
     if (grandparent == null) {
-      // As this method is only called on red nodes (either on newly inserted ones - or -
-      // recursively on red grandparents), all we have to do is to recolor the root black.
       parent.color = true;
       return;
     }
-
-    // Get the uncle (may be null/nil, in which case its color is BLACK)
-    Node uncle = getUncle(parent);
+    Node uncle = null;
+    if (grandparent.left == parent) {
+      uncle = grandparent.right;
+    } else if (grandparent.right == parent) {
+      uncle = grandparent.left;
+    }
 
     // Case 3: Uncle is red -> recolor parent, grandparent and uncle
     if (uncle != null && uncle.color == false) {
       parent.color = true;
       grandparent.color = false;
       uncle.color = true;
-
-      // Call recursively for grandparent, which is now red.
-      // It might be root or have a red parent, in which case we need to fix more...
       balance(grandparent);
-    }
-
-    // Note on performance:
-    // It would be faster to do the uncle color check within the following code. This way
-    // we would avoid checking the grandparent-parent direction twice (once in getUncle()
-    // and once in the following else-if). But for better understanding of the code,
-    // I left the uncle color check as a separate step.
-
-    // Parent is left child of grandparent
-    else if (parent == grandparent.left) {
-      // Case 4a: Uncle is black and node is left->right "inner child" of its grandparent
+    } else if (parent == grandparent.left) {
       if (node == parent.right) {
         rotateLeft(parent);
-
-        // Let "parent" point to the new root node of the rotated sub-tree.
-        // It will be recolored in the next step, which we're going to fall-through to.
         parent = node;
       }
-
-      // Case 5a: Uncle is black and node is left->left "outer child" of its grandparent
       rotateRight(grandparent);
-
-      // Recolor original parent and grandparent
       parent.color = true;
       grandparent.color = false;
-    }
-
-    // Parent is right child of grandparent
-    else {
-      // Case 4b: Uncle is black and node is right->left "inner child" of its grandparent
+    } else {
       if (node == parent.left) {
         rotateRight(parent);
-
-        // Let "parent" point to the new root node of the rotated sub-tree.
-        // It will be recolored in the next step, which we're going to fall-through to.
         parent = node;
       }
-
-      // Case 5b: Uncle is black and node is right->right "outer child" of its grandparent
       rotateLeft(grandparent);
-
-      // Recolor original parent and grandparent
       parent.color = true;
       grandparent.color = false;
     }
@@ -246,21 +198,18 @@ public class RBTree {
       return null;
     }
     while (true) {
-      if (key > r.key)
-      {
+      if (key > r.key) {
         s = r;
         r = r.right;
-      }
-      else if (key < r.key) {
+      } else if (key < r.key) {
         r = r.left;
-      }
-      else {
+      } else {
         Node left = r.left;
         if (left != null) {
           while (left.right != null) {
             left = left.right;
           }
-          s=left;
+          s = left;
         }
         break;
       }
@@ -280,21 +229,18 @@ public class RBTree {
       return null;
     }
     while (true) {
-      if (key < r.key)
-      {
+      if (key < r.key) {
         s = r;
         r = r.left;
-      }
-      else if (key > r.key) {
+      } else if (key > r.key) {
         r = r.right;
-      }
-      else {
+      } else {
         Node right = r.right;
         if (right != null) {
           while (right.left != null) {
             right = right.left;
           }
-          s=right;
+          s = right;
         }
         break;
       }
@@ -323,35 +269,76 @@ public class RBTree {
     return r;
   }
 
+  public int getDepth(){
+    return depthHelper(root);
+  }
+
+  private int depthHelper(Node node) {
+    if (node == null)
+      return 0;
+    else {
+      /* compute the depth of each subtree */
+      int lDepth = depthHelper(node.left);
+      int rDepth = depthHelper(node.right);
+
+      /* use the larger one */
+      if (lDepth > rDepth)
+        return (lDepth + 1);
+      else
+        return (rDepth + 1);
+    }
+  }
+
   public void printTree() {
     Node x = root;
     printTreeHelper(x, "");
   }
 
-  public void printTreeHelper(Node node, String prefix)
-  {
-    if(node == null) return;
+  public void printTreeHelper(Node node, String prefix) {
+    if (node == null) return;
+    String c;
+    if (node.color == false) {
+      c = "R";
+    } else {
+      c = "B";
+    }
 
-    System.out.println(prefix + " + " + node.key+node.color);
-    printTreeHelper(node.left , prefix + " ");
-    printTreeHelper(node.right , prefix + " ");
+    System.out.println(prefix + " -- " + node.key + c);
+    printTreeHelper(node.right, prefix + "       ");
+    printTreeHelper(node.left, prefix + "       ");
   }
 
   public static void main(String[] args) {
     RBTree t = new RBTree();
-    int[] a = new int[]{6,5,2,1,8,9};//
-    for (int i = 0; i<a.length;i++) {
-      t.insert(a[i]);
+    int e;
+    try {
+      Scanner s = new Scanner(new File("C:\\Users\\njord\\IdeaProjects\\Algorithms_notes\\src\\RedBlackTree\\RBTree_Array.txt"));
+      while (s.hasNext()) {
+        e = s.nextInt();
+        System.out.println(e);
+        t.insert(e);
+      }
+    } catch (FileNotFoundException fnf) {
+      throw new IllegalArgumentException("RBTree_Array not found");
     }
-    System.out.println(t.search(6).parent.key);
-    System.out.println(t.search(2).parent.key);
-    System.out.println(t.search(1).parent.key);
-    System.out.println(t.search(8).parent.key);
-    System.out.println(t.search(9).parent.key);
     t.printTree();
-//    System.out.println(t.min().key);
-//    System.out.println(t.predecessor(5).key);
-//    System.out.println(t.successor(2).key);
+    System.out.println(t.getDepth());
+//    Scanner scan = new Scanner(System.in);
+//    String element = "";
+//    while (scan.hasNext()) {
+//      try {
+//        element = scan.next();
+//        switch (element) {
+//          case "q":
+//          case "Q":
+//            System.out.println("Quit.");
+//            return;
+//          case "i":
+//          case "I":
+//            System.out.println("I");
+//        }
+//      }
+//    }
   }
 }
 
