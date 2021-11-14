@@ -48,12 +48,12 @@ public class Tree {
         }
         return n.key;
     }
-    public Node search(int key) {
-
-    }
-    public Node searchHelper(Node node, int key) {
-        if
-    }
+//    public Node search(int key) {
+//
+//    }
+//    public Node searchHelper(Node node, int key) {
+//        if
+//    }
 
     public static void main(String[] args) {
         Tree t = new Tree();
