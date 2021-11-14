@@ -5,7 +5,8 @@ public class Tree {
 
     public static class Node {
         int key;
-        Node left,right;
+        Node left,right,parent;
+        boolean color;
 
         public Node(int data) {
             this.key = data;
@@ -14,19 +15,20 @@ public class Tree {
     }
 
     public static Node insert(Node root, int key) {
-        return insertHelper(root, key);
+        return insertHelper(root, null, key);
     }
 
-    private static Node insertHelper(Node node, int key) {
+    private static Node insertHelper(Node node, Node parent, int key) {
         if (node == null)
         {
             node = new Node(key);
+            node.color = false;
             return node;
         }
         if (key < node.key)
-            node.left = insertHelper(node.left, key);
+            node.left = insertHelper(node.left, node, key);
         else if (key > node.key)
-            node.right = insertHelper(node.right, key);
+            node.right = insertHelper(node.right, node, key);
         return node;
     }
 
@@ -50,11 +52,11 @@ public class Tree {
         if (node==null || node.key==key) {
             return node;
         }
-        if (node.key < key)
+        else if (node.key < key)
             return searchHelper(node.right, key);
-
-        // Key is smaller than root's key
-        return searchHelper(node.left, key);
+        else {
+            return searchHelper(node.left, key);
+        }
     }
 
     public static Node successor(Node root, int key) {
@@ -115,6 +117,35 @@ public class Tree {
         return s;
     }
 
+    public static Node rotateRight(Node root, int key) {
+        Node s = null;
+        if (root == null) {
+            return null;
+        }
+        while (true) {
+            if (key > root.key)
+            {
+                s = root;
+                root = root.right;
+            }
+            else if (key < root.key) {
+                root = root.left;
+            }
+            else {
+                if (root.left != null) {
+                    s = max(root.left);
+                }
+                break;
+            }
+            if (root == null) {
+                return s;
+            }
+        }
+
+        // return successor, if any
+        return s;
+    }
+
     public static void main(String[] args) {
         Node x = null;
         int[] a = new int[]{6,5,2,1,8,9};
@@ -124,7 +155,7 @@ public class Tree {
         System.out.println(min(x).key);
         System.out.println(max(x).key);
         System.out.println(successor(x,7).key);
-        System.out.println(search(x,0).key);
-        System.out.println(predecessor(x,9).key);
+        System.out.println(search(x,5).key);
+        System.out.println(predecessor(x,5).key);
     }
 }
