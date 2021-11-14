@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class DP {
 
 
@@ -82,6 +84,45 @@ public class DP {
 
     }
 
+    public static void getPalindrome(String p) {
+        int[][] c = new int[p.length()][p.length()];
+        int[][] s = new int[p.length()][p.length()];
+        int best_p;
+        int best_i;
+        int best;
+        c[0][0] = 0;
+        c[1][0] = 1;
+        c[0][1] = 1;
+        // loop through p lengths
+        for (int z=2;z<p.length();z++) {
+            String x1 = p.substring(0,z);
+            String x2 = p.substring(z,p.length());
+            best = Integer.MAX_VALUE*(-1);
+            for (int i=1;i<z;i++) {
+                best_i = 0;
+                for (int j=i;j>=0;j--) {
+                    if (x1.indexOf(i) == x2.indexOf(j)) {
+                        if ((1+c[i-1][j-1])>best) {
+                            best_i = (1+c[i-1][j-1]);
+                        }
+                    }
+                    else {
+                        int temp = Math.max(c[i-1][j],c[i][j-1]);
+                        if (temp>best) {
+                            best_i = temp;
+                        }
+                    }
+                }
+                c[z][i]=best;
+            }
+        }
+        // loop through indeces 1 to n
+        // loop to that indece
+
+
+
+    }
+
     public static void main(String[] args) {
         // get rod
 //        int[] p = new int[]{2, 1, 6, 8};
@@ -93,8 +134,63 @@ public class DP {
 
 
         // jars
-        System.out.println(getDrops(2,5));
+        //System.out.println(getDrops(2,5));
 
+//        String[]
+//        getPalindrome();
+//        int[] A = new int[]{2,43,4,7,11,2,4};
+//        getLIS(A);
 
+        char[] B = new char[]{'d','e','f'};
+        char[] C = new char[]{'d','e','f'};
+        getLCS(B,C);
+    }
+
+    public static void getLCS(char[] B, char[] C) {
+
+        int[][] c = new int[B.length+1][B.length+1];
+        int[][] s = new int[B.length+1][B.length+1];
+        c[0][0] = 0;
+
+        for (int i=1;i<B.length;i++) {
+            for (int j=1;j<B.length;j++) { //{2,43,4,7,11,2,4}
+                if (B[i]==C[j]) {
+                    c[i][j] = 1 + c[i-1][j-1];
+                }
+                else {
+                    c[i][j] = Math.max(c[i-1][j],c[i][j-1]);
+                }
+            }
+        }
+        System.out.println(c[B.length][B.length]);
+    }
+
+    public static void getLIS(int[] A) {
+        // recurrence , c[n] = maxj c[j] + 1
+
+        int[] c = new int[A.length];
+        int[] s = new int[A.length];
+        c[0] = 1;
+        c[1] = 1;
+
+        for (int i=1;i<A.length;i++) {
+            int best = 1;
+            int best_j = 0;
+            for (int j=0;j<i;j++) { //{2,43,4,7,11,2,4}
+                if (A[i]>A[j]) {
+                    best = Math.max(best,c[j] + 1);
+                    best_j = j;
+                }
+            }
+            c[i] = best;
+            s[i] = best_j;
+        }
+        for (int p=0;p<c.length;p++) {
+            System.out.print(c[p]);
+        }
+        System.out.println();
+        for (int p=0;p<c.length;p++) {
+            System.out.print(s[p]);
+        }
     }
 }
