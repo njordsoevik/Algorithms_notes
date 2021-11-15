@@ -100,6 +100,9 @@ public class RBTree {
       } else if (key < r.key) {
         r = r.left;
       }
+      else {
+        throw new IllegalArgumentException("Key already exists.");
+      }
     }
 
     Node n = new Node(key);
@@ -332,6 +335,16 @@ public class RBTree {
     } catch (FileNotFoundException fnf) {
       throw new IllegalArgumentException("RBTree_Array not found");
     }
+//    t.insert(3);
+//    t.printTree();
+//    t.insert(7);
+//    t.printTree();
+//    t.insert(45);
+//    t.printTree();
+//    t.insert(3456);
+//    t.printTree();
+////    t.insert(3);
+////    t.printTree();
     Scanner scan = new Scanner(System.in);
     String element = "";
     int keyInput;
@@ -372,10 +385,21 @@ public class RBTree {
             keyInput = scan.nextInt();
             System.out.println(t.successor(keyInput).key);
             break;
+          case "insert":
+            System.out.println("Enter Key: ");
+            keyInput = scan.nextInt();
+            try {
+              t.insert(keyInput);
+            } catch (IllegalArgumentException ex) {
+              System.out.println("Key already exists!");
+            }
+
+            break;
           default:
             System.out.println("Unknown command");
         }
-        System.out.println("Enter a command: (print/sort/search/min/max/predecessor/successor/q)");
+        System.out.println("Height of tree: "+t.depthHelper(t.root));
+        System.out.println("Enter a command: (print/sort/search/insert/min/max/predecessor/successor/q)");
       }
     }
   }
