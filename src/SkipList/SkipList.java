@@ -59,13 +59,15 @@ public class SkipList {
     Node position = search(data);
     Node q;
 
+    int heads = flipCoin();
     int l = -1;
 
     if (data == position.data) {
       return;
     } else {
       length++;
-      do {
+
+      for (int i = 0; i<heads+1;i++) {
         l++;
 
         increaseLevel(l);
@@ -74,15 +76,13 @@ public class SkipList {
         while (position.above == null) {
           position = position.prev;
         }
-
         position = position.above;
-        q = insertAfter(position, q, data);
-
-      } while (rand.nextBoolean() == true);
+        insertAfter(position, q, data);
+      }
     }
   }
 
-  private Node insertAfter(Node position, Node q, int data) {
+  private void insertAfter(Node position, Node q, int data) {
     Node newNode = new Node(data);
     Node nodeBeforeNewNode = position.below.below;
 
@@ -110,7 +110,6 @@ public class SkipList {
         newNode.above = position.next;
       }
     }
-    return newNode;
   }
 
   private void increaseLevel(int l) {
@@ -200,24 +199,6 @@ public class SkipList {
         }
       }
     }
-
-
-//    while (rowStart != null) {
-//      b.append("Height: " + h + "\n");
-//
-//      while (current != null) {
-//        int value = current.data;
-//        b.append(" | ").append(value).append(" | ");
-//        if (h == 0) {
-//          values.add(value);
-//        }
-//        current = current.next;
-//      }
-//      rowStart = rowStart.above;
-//      current = rowStart;
-//      h++;
-//      b.append("\n");
-//    }
     return b.toString();
   }
 
