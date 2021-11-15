@@ -2,8 +2,6 @@ package RedBlackTree;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class RBTree {
@@ -88,7 +86,7 @@ public class RBTree {
         return r;
       }
     }
-    return null;
+    return new Node(-1);
   }
 
   public void insert(int key) {
@@ -269,7 +267,7 @@ public class RBTree {
     return r;
   }
 
-  public int getDepth(){
+  public int getDepth() {
     return depthHelper(root);
   }
 
@@ -288,6 +286,19 @@ public class RBTree {
         return (rDepth + 1);
     }
   }
+
+  public void printInOrder() {
+    printInOrderHelper(root);
+
+  }
+  private void printInOrderHelper(Node node) {
+    if (node != null) {
+      printInOrderHelper(node.left);
+      System.out.print(node.key+", ");
+      printInOrderHelper(node.right);
+    }
+  }
+
 
   public void printTree() {
     Node x = root;
@@ -315,30 +326,58 @@ public class RBTree {
       Scanner s = new Scanner(new File("C:\\Users\\njord\\IdeaProjects\\Algorithms_notes\\src\\RedBlackTree\\RBTree_Array.txt"));
       while (s.hasNext()) {
         e = s.nextInt();
-        System.out.println(e);
         t.insert(e);
       }
+      s.close();
     } catch (FileNotFoundException fnf) {
       throw new IllegalArgumentException("RBTree_Array not found");
     }
-    t.printTree();
-    System.out.println(t.getDepth());
-//    Scanner scan = new Scanner(System.in);
-//    String element = "";
-//    while (scan.hasNext()) {
-//      try {
-//        element = scan.next();
-//        switch (element) {
-//          case "q":
-//          case "Q":
-//            System.out.println("Quit.");
-//            return;
-//          case "i":
-//          case "I":
-//            System.out.println("I");
-//        }
-//      }
-//    }
+    Scanner scan = new Scanner(System.in);
+    String element = "";
+    int keyInput;
+    while (true) {
+      System.out.println("Enter a command: (print/sort/search/min/max/predecessor/successor/q)");
+      while (scan.hasNext()) {
+        element = scan.next();
+        switch (element) {
+          case "q":
+          case "Q":
+            System.out.println("Quit.");
+            return;
+          case "print":
+            t.printTree();
+            break;
+          case "sort":
+            t.printInOrder();
+            System.out.println();
+            break;
+          case "search":
+            System.out.println("Enter Key: ");
+            keyInput = scan.nextInt();
+            System.out.println(t.search(keyInput).key);
+            break;
+          case "min":
+            System.out.println(t.min().key);
+            break;
+          case "max":
+            System.out.println(t.max().key);
+            break;
+          case "predecessor":
+            System.out.println("Enter Key: ");
+            keyInput = scan.nextInt();
+            System.out.println(t.predecessor(keyInput).key);
+            break;
+          case "successor":
+            System.out.println("Enter Key: ");
+            keyInput = scan.nextInt();
+            System.out.println(t.successor(keyInput).key);
+            break;
+          default:
+            System.out.println("Unknown command");
+        }
+        System.out.println("Enter a command: (print/sort/search/min/max/predecessor/successor/q)");
+      }
+    }
   }
 }
 
