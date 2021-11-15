@@ -25,25 +25,45 @@ public class LinkedListHash {
     public void insert(String data, Integer count) {
         Node n = new Node(data, count);
         n.next = null;
-
-        if (this.head == null) {
-            this.head = n;
-        } else {
-            Node last = this.head;
-            if (last.data == data) {
-                last.count += count;
-                return;
-            }
-            while (last.next != null) {
-                if (last.next.data == data){
-                    last.next.count += count;
+        if (data.equals("no")){
+            if (this.head == null) {
+                this.head = n;
+            } else {
+                Node last = this.head;
+                if (last.data.equals(data)) {
+                    last.count += count;
                     return;
                 }
-                last = last.next;
+                while (last.next != null) {
+                    if (last.next.data.equals(data)){
+                        last.next.count += count;
+                        return;
+                    }
+                    last = last.next;
+                }
+                last.next = n;
             }
+        } else {
+            if (this.head == null) {
+                this.head = n;
+            } else {
+                Node last = this.head;
+                if (last.data.equals(data)) {
+                    last.count += count;
+                    return;
+                }
+                while (last.next != null) {
+                    if (last.next.data.equals(data)){
+                        last.next.count += count;
+                        return;
+                    }
+                    last = last.next;
+                }
 
-            last.next = n;
+                last.next = n;
+            }
         }
+
     }
 
     public Integer get(String key) {
@@ -58,12 +78,14 @@ public class LinkedListHash {
         return null;
     }
 
-    public void printList() {
+    public String printList() {
+        StringBuilder b = new StringBuilder();
         Node currNode = this.head;
         while (currNode != null) {
-            System.out.print("| " + currNode.data + ", " + currNode.count + " |");
+            b.append("| ").append(currNode.data).append(" (").append(currNode.count).append(") |");
             currNode = currNode.next;
         }
+        return b.toString();
     }
 
     public void delete(String key) {
