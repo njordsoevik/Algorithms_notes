@@ -1,5 +1,7 @@
 package SkipList;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class SkipList {
@@ -57,15 +59,14 @@ public class SkipList {
     Node position = search(data);
     Node q;
 
-    int num = -1;
     int l = -1;
 
     if (data == position.data) {
       return;
     } else {
+      length++;
       do {
         l++;
-        num++;
 
         increaseLevel(l);
 
@@ -134,24 +135,24 @@ public class SkipList {
     tail = newTail;
   }
 
-  public Node remove(int data) {
+  public void remove(int data) {
     Node remove = search(data);
     if (remove.data != data) {
-      return null;
-    }
-
-    removeReferences(remove);
-
-    while (remove != null) {
+      return;
+    } else {
+      length--;
       removeReferences(remove);
 
-      if (remove.above != null) {
-        remove = remove.above;
-      } else {
-        break;
+      while (remove != null) {
+        removeReferences(remove);
+
+        if (remove.above != null) {
+          remove = remove.above;
+        } else {
+          break;
+        }
       }
     }
-    return remove;
   }
 
   private void removeReferences(Node remove) {
@@ -165,21 +166,58 @@ public class SkipList {
   @Override
   public String toString() {
     StringBuilder b = new StringBuilder();
-    Node node = head;
-    Node rowStart = node;
-    int h = height;
+    Node rowStart = head;
+    int h = 0;
+    List<Integer> values = new ArrayList<>();
 
-    while (rowStart != null) {
-      b.append("Height: " + h + "\n");
-      while (node != null) {
-        b.append(" | ").append(node.data).append(" | ");
-        node = node.next;
-      }
+    while (rowStart.below != null) {
       rowStart = rowStart.below;
-      node = rowStart;
-      h--;
-      b.append("\n");
     }
+    Node current = rowStart;
+    b.append("Height: ").append(h).append("\n");
+    while (current != null) {
+      int value = current.data;
+      b.append(" | ").append(value).append(" | ");
+      values.add(value);
+      current = current.next;
+    }
+
+    while (rowStart.above != null) {
+      h++;
+      rowStart=rowStart.above;
+      current=rowStart;
+      b.append("\n").append("Height: ").append(h).append("\n");
+      for (int i=0;i<values.size();i++) {
+        if (current.data == values.get(i)) {
+          b.append(" | ").append(current.data).append(" | ");
+          current=current.next;
+        } else {
+          b.append(" | ");
+          for (int j = 0; j < values.get(i).toString().length(); j++) {
+            b.append(" ");
+          }
+          b.append(" | ");
+        }
+      }
+    }
+
+
+//    while (rowStart != null) {
+//      b.append("Height: " + h + "\n");
+//
+//      while (current != null) {
+//        int value = current.data;
+//        b.append(" | ").append(value).append(" | ");
+//        if (h == 0) {
+//          values.add(value);
+//        }
+//        current = current.next;
+//      }
+//      rowStart = rowStart.above;
+//      current = rowStart;
+//      h++;
+//      b.append("\n");
+//    }
     return b.toString();
   }
 
