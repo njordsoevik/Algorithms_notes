@@ -4,7 +4,7 @@ public class Node{
     int data;
     Node next;
     Node prev;
-    Node child;
+    DoubleLinkedList child;
     Node parent;
     int degree;
     int mark;
@@ -19,7 +19,7 @@ public class Node{
     public void setMark(int b) {
         this.mark=b;
     }
-    public void setChild(Node x) {
+    public void setChild(DoubleLinkedList x) {
         this.child = x;
     }
     public void setParent(Node x) {

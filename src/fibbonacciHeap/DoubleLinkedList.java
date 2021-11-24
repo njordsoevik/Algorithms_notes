@@ -1,7 +1,11 @@
 package fibbonacciHeap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DoubleLinkedList {
     Node head;
+    Node parent;
 
     public void addNode(Node n) {
         if (this.head == null) {
@@ -75,6 +79,24 @@ public class DoubleLinkedList {
         }
         d2.addNode(temp);
         return d2;
+    }
+
+    public void setParent(Node x) {
+        this.parent = x;
+    }
+
+    public Node[] getList(){
+        List<Node> li = new ArrayList<>();
+        Node temp = this.head;
+        li.add(temp);
+        while (temp.next != this.head)
+        {
+            li.add(temp);
+            temp = temp.next;
+        }
+        Node[] nodes = new Node[li.size()];
+        nodes = li.toArray(nodes);
+        return nodes;
     }
 
     public static void main(String[] args)
