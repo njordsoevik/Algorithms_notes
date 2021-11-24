@@ -8,13 +8,13 @@ public class FibonacciHeap {
 
     public FibonacciHeap() {
         this.rootList = new DoubleLinkedList();
-        min = new Node(Integer.MAX_VALUE);
+        min = null;
         n=0;
     }
 
     public void insert(Node x) {
         x.setDegree(0);
-        if (x.data<min.data) {
+        if (min == null) {
             min = x;
         }
         rootList.addNode(x);
@@ -38,22 +38,49 @@ public class FibonacciHeap {
     public Node extractMin() {
         Node z = this.min;
         if (this.min.data!=Integer.MAX_VALUE) {
-
+            Node childOriginal = this.min.child;
+            if (childOriginal != null) {
+                this.rootList.addNode(new Node(childOriginal.data));
+                Node child = childOriginal.next;
+                while (child != null && child != childOriginal) {
+                    this.rootList.addNode(new Node(child.data));
+                    child = child.next;
+                }
+            }
+            rootList.remove(z.data);
+            if (z.next == z) {
+                this.min = null;
+            }
+            else {
+                consolidate();
+            }
+            this.n=this.n-1;
         }
 
         return z;
     }
 
+    private void consolidate() {
+
+    }
+
     public static void main(String[] args) {
-        FibonacciHeap f1 = new FibonacciHeap();
-        f1.insert(new Node(32));
-        f1.insert(new Node(21));
-        System.out.println(f1.rootList);
-        FibonacciHeap f2 = new FibonacciHeap();
-        f2.insert(new Node(22));
-        f2.insert(new Node(91));
-        FibonacciHeap c = f1.union(f2);
-        System.out.println(c.rootList);
-        System.out.println(c.min.data);
+        //        FibonacciHeap f1 = new FibonacciHeap();
+//        f1.insert(new Node(32));
+//        f1.insert(new Node(21));
+//        System.out.println(f1.rootList);
+//        FibonacciHeap f2 = new FibonacciHeap();
+//        f2.insert(new Node(22));
+//        f2.insert(new Node(91));
+//        FibonacciHeap c = f1.union(f2);
+//        System.out.println(c.rootList);
+//        System.out.println(c.min.data);
+
+        FibonacciHeap f3 = new FibonacciHeap();
+        f3.insert(new Node(32));
+        System.out.println(f3.extractMin());
+        System.out.println(f3.min);
+        f3.insert(new Node(22));
+        System.out.println(f3.min.data);
     }
 }

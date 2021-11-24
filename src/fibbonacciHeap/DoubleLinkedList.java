@@ -27,7 +27,6 @@ public class DoubleLinkedList {
     public String toString()   {
         StringBuilder sb = new StringBuilder();
         Node temp = head;
-
         while (temp.next != head)
         {
             sb.append(" ").append(temp.data);
@@ -48,9 +47,26 @@ public class DoubleLinkedList {
         System.out.printf("%d ", temp.data);
     }
 
+    public Node remove(int value) {
+        Node temp = head;
+        if (temp.data == value) {
+            head = head.next;
+            return temp;
+        }
+        temp = temp.next;
+        while (temp != head) {
+            if (temp.data == value) {
+                temp.prev.next = temp.next;
+                temp.next.prev=temp.prev;
+                return temp;
+            }
+            temp = temp.next;
+        }
+        return null;
+    }
+
     public DoubleLinkedList combine(DoubleLinkedList d2) {
         Node temp = this.head;
-        System.out.println(temp.data);
         while (temp.next != this.head)
         {
             int data = temp.data;
@@ -65,9 +81,12 @@ public class DoubleLinkedList {
     {
         DoubleLinkedList l_list = new DoubleLinkedList();
 
+        Node p = new Node(90);
+        Node p2 = new Node(630);
+        l_list.addNode(p);
         l_list.addNode(new Node(2));
         l_list.addNode(new Node(70));
-        l_list.addNode(new Node(630));
+        l_list.addNode(p2);
         DoubleLinkedList l_list2 = new DoubleLinkedList();
 
         l_list2.addNode(new Node(32));
@@ -75,7 +94,9 @@ public class DoubleLinkedList {
         l_list2.addNode(new Node(6230));
 
         System.out.println(l_list);
-        //l_list.toStringReversed();
-        System.out.println(l_list.combine(l_list2));
+        DoubleLinkedList c = l_list.combine(l_list2);
+        System.out.println(c);
+        c.remove(630);
+        System.out.println(c);
     }
 }
