@@ -7,6 +7,17 @@ public class DoubleLinkedList {
     Node head;
     Node parent;
 
+    public Node Node(Node n) {
+        Node r = new Node(n.data);
+        r.prev=n.prev;
+        r.next=n.next;
+        r.parent = n.parent;
+        r.mark = n.mark;
+        r.child=n.child;
+        r.degree=n.degree;
+        return r;
+    }
+
     public void addNode(Node n) {
         if (this.head == null) {
             n.next = n.prev = n;
@@ -69,6 +80,7 @@ public class DoubleLinkedList {
         return null;
     }
 
+
     public DoubleLinkedList combine(DoubleLinkedList d2) {
         Node temp = this.head;
         while (temp.next != this.head)
@@ -91,34 +103,63 @@ public class DoubleLinkedList {
         li.add(temp);
         while (temp.next != this.head)
         {
-            li.add(temp);
             temp = temp.next;
+            li.add(temp);
         }
         Node[] nodes = new Node[li.size()];
         nodes = li.toArray(nodes);
         return nodes;
     }
 
-    public static void main(String[] args)
-    {
-        DoubleLinkedList l_list = new DoubleLinkedList();
+    public void swap(Node x, Node y) {
+        Node prevX = x.prev;
+        Node nextX = x.next;
+        Node prevY = y.prev;
+        Node nextY = y.next;
+        if (nextX == y) {
+            y.prev = prevX;
+            prevX.next=y;
+            y.next = x;
+            x.prev = y;
+            x.next = nextY;
+            nextY.prev = x;
+        } else if (nextY == x) {
+            x.prev = prevY;
+            prevY.next=x;
+            x.next = y;
+            y.prev = x;
+            y.next = nextX;
+            nextX.prev = y;
+        } else {
+            x.next = nextY;
+            x.prev = prevY;
+            y.next = nextX;
+            y.prev = prevX;
+//        System.out.println(x.data+"DATA "+x.prev.data +" " + x.next.data);
+//        System.out.println(y.data+"DATA "+y.prev.data +" " + y.next.data);
+            nextX.prev = y;
+            nextY.prev = x;
+            prevX.next = y;
+            prevY.next = x;
+        }
+        if (head == x) {
+            head = y;
+        } else if (head == y) {
+            head = x;
+        }
+    }
 
-        Node p = new Node(90);
+    public static void main(String[] args) {
+        Node p1 = new Node(90);
         Node p2 = new Node(630);
-        l_list.addNode(p);
-        l_list.addNode(new Node(2));
-        l_list.addNode(new Node(70));
-        l_list.addNode(p2);
+        Node p3 = new Node(32);
         DoubleLinkedList l_list2 = new DoubleLinkedList();
-
-        l_list2.addNode(new Node(32));
-        l_list2.addNode(new Node(740));
+        l_list2.addNode(p1);
+        l_list2.addNode(p2);
+        l_list2.addNode(p3);
         l_list2.addNode(new Node(6230));
-
-        System.out.println(l_list);
-        DoubleLinkedList c = l_list.combine(l_list2);
-        System.out.println(c);
-        c.remove(630);
-        System.out.println(c);
+        System.out.println(l_list2);
+        l_list2.swap(p1,p3);
+        System.out.println(l_list2);
     }
 }
