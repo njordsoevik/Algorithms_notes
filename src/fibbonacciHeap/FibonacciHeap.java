@@ -71,6 +71,7 @@ public class FibonacciHeap {
         for (Node w:holding) {
             Node x = w;
             int d = x.degree;
+
             while (a[d]!=null){
                 Node y = a[d];
                 if (x.data > y.data) {
@@ -82,18 +83,23 @@ public class FibonacciHeap {
                 heapLink(y,x);
                 a[d] = null;
                 d = d + 1;
+                x.degree = d;
             }
             a[d] = x;
+            x.degree = d;
+
+            System.out.println(this);
+
+            System.out.println("THIS IS THE ARRAY");
+            for (int i = 0; i < a.length; i++) {
+                if (a[i] != null) {
+                    System.out.print("| "+i + " : "+ a[i].data+" |");
+                }
+            }
+            System.out.println();
         }
 
         min = null;
-//        System.out.println("ARRAY");
-//        for (int i = 0; i < a.length; i++) {
-//            if (a[i] != null) {
-//                System.out.println(i);
-//                System.out.println(a[i].data);
-//            }
-//        }
         DoubleLinkedList newRoot = new DoubleLinkedList();
         for (int i = 0; i < a.length; i++) {
             if (a[i] != null) {
@@ -106,14 +112,13 @@ public class FibonacciHeap {
                         min = a[i];
                     }
                 }
-                a[i].degree = i; // Set degree to be accurate to new tree
             }
         }
     this.rootList = newRoot;
     }
 
     private void heapLink(Node y, Node x) {
-        System.out.println(this + " link called for " + x.data+"," +y.data);
+        System.out.println(" link called for " + x.data+"," +y.data);
         rootList.remove(y.data);
         if (x.child == null) {
             x.child = new DoubleLinkedList();
