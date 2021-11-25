@@ -36,6 +36,8 @@ public class DoubleLinkedList {
 
         // Make new node next of old last
         last.next = n;
+
+        n.parent = parent;
     }
 
     @Override
@@ -65,6 +67,8 @@ public class DoubleLinkedList {
     public Node remove(int value) {
         Node temp = head;
         if (temp.data == value) {
+            head.prev.next = head.next;
+            head.next.prev = head.prev;
             head = head.next;
             return temp;
         }
