@@ -85,20 +85,31 @@ public class FibonacciHeap {
             }
             a[d] = x;
         }
+
         min = null;
+//        System.out.println("ARRAY");
 //        for (int i = 0; i < a.length; i++) {
 //            if (a[i] != null) {
-//                if (min == null) {
-//                    rootList.addNode(a[i]);
-//                    min = a[i];
-//                } else {
-//                    rootList.addNode(a[i]);
-//                    if (a[i].data < min.data) {
-//                        min = a[i];
-//                    }
-//                }
+//                System.out.println(i);
+//                System.out.println(a[i].data);
 //            }
 //        }
+        DoubleLinkedList newRoot = new DoubleLinkedList();
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] != null) {
+                if (min == null) {
+                    newRoot.addNode(a[i]);
+                    min = a[i];
+                } else {
+                    newRoot.addNode(a[i]);
+                    if (a[i].data < min.data) {
+                        min = a[i];
+                    }
+                }
+                a[i].degree = i; // Set degree to be accurate to new tree
+            }
+        }
+    this.rootList = newRoot;
     }
 
     private void heapLink(Node y, Node x) {
@@ -131,15 +142,48 @@ public class FibonacciHeap {
         StringBuilder sb = new StringBuilder();
         Node[] children = x.child.getList();
         for (Node c: children) {
-            sb.append("-").append(c.data).append("-").append("\n");
+            for (int d = 0; d<x.child.countParents(); d++){
+                sb.append("--> ");
+            }
+            sb.append(" ").append(c.data).append(" ,").append("\n");
             if (c.child != null) {
-                sb.append("  ").append(toStringHelper(c));
+                sb.append(toStringHelper(c));
             }
         }
         return sb.toString();
     }
 
     public static void main(String[] args) {
+                FibonacciHeap f3 = new FibonacciHeap();
+        Node p = new Node(190);
+        f3.insert(new Node(32));
+        f3.insert(p);
+        f3.insert(new Node(33));
+        f3.insert(new Node(42));
+        f3.insert(new Node(122));
+        f3.insert(new Node(12));
+        System.out.println();
+        f3.extractMin();
+
+        System.out.println("FINAL");
+        System.out.println("NEW MIN: " + f3.min.data);
+        System.out.println(f3);
+
+
+        f3.extractMin();
+
+        System.out.println("FINAL");
+        System.out.println("NEW MIN: " + f3.min.data);
+        System.out.println(f3);
+
+        f3.extractMin();
+
+        System.out.println("FINAL");
+        System.out.println("NEW MIN: " + f3.min.data);
+        System.out.println(f3);
+
+        // TEST with one depth
+
 //        FibonacciHeap f3 = new FibonacciHeap();
 //        Node p = new Node(1);
 //        DoubleLinkedList d = new DoubleLinkedList();
@@ -159,25 +203,27 @@ public class FibonacciHeap {
 //        System.out.println(f3 + "NEW");
 
 
-
-        FibonacciHeap f3 = new FibonacciHeap();
-        Node p = new Node(1);
-        DoubleLinkedList d = new DoubleLinkedList();
-        d.addNode(new Node(5));
-        d.addNode(new Node(6));
-        p.child = d;
-        f3.insert(new Node(32));
-        f3.insert(p);
-        f3.insert(new Node(33));
-        f3.insert(new Node(222));
-        f3.insert(new Node(7));
-        f3.insert(new Node(42));
-        f3.insert(new Node(122));
-        f3.insert(new Node(12));
-        System.out.println("ORIGINAL");
-        System.out.println(f3);
-        System.out.println();
-        f3.extractMin();
-        System.out.println(f3 + "NEW");
+// TEST with two depth
+//        FibonacciHeap f3 = new FibonacciHeap();
+//        Node p = new Node(1);
+//        DoubleLinkedList d = new DoubleLinkedList();
+//        d.addNode(new Node(5));
+//        d.addNode(new Node(6));
+//        p.child = d;
+//        Node thirtytwo = new Node(32);
+//        f3.insert(thirtytwo);
+//        f3.insert(p);
+//        f3.insert(new Node(33));
+//        f3.insert(new Node(222));
+//        Node seven = new Node(7);
+//        f3.insert(seven);
+//        f3.insert(new Node(42));
+//        f3.insert(new Node(122));
+//        f3.insert(new Node(12));
+//        System.out.println("ORIGINAL");
+//        System.out.println(f3);
+//        System.out.println();
+//        f3.extractMin();
+//        System.out.println(f3 + "NEW");
     }
 }

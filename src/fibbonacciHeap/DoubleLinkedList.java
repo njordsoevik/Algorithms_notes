@@ -84,6 +84,15 @@ public class DoubleLinkedList {
         return null;
     }
 
+    public int countParents() {
+        int count = 0;
+        Node parent = this.parent;
+        while (parent!=null) {
+            count++;
+            parent = parent.parent;
+        }
+        return count;
+    }
 
     public DoubleLinkedList combine(DoubleLinkedList d2) {
         Node temp = this.head;

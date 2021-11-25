@@ -21,9 +21,8 @@ public class Node{
     }
     public void setChild(DoubleLinkedList x) {
         this.child = x;
-    }
-    public void setParent(Node x) {
-        this.parent = x;
+        x.parent = this;
+        this.degree = x.getList().length;
     }
 
 }
