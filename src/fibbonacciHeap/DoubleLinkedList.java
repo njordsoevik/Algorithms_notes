@@ -44,6 +44,9 @@ public class DoubleLinkedList {
     public String toString()   {
         StringBuilder sb = new StringBuilder();
         Node temp = head;
+        if (temp == null) {
+            return "";
+        }
         while (temp.next != head)
         {
             sb.append(" ").append(temp.data);
@@ -67,6 +70,11 @@ public class DoubleLinkedList {
     public Node remove(int value) {
         Node temp = head;
         if (temp.data == value) {
+            if (head.next == head) { // One value check
+
+                head = null;
+                return temp;
+            }
             head.prev.next = head.next;
             head.next.prev = head.prev;
             head = head.next;
@@ -113,11 +121,13 @@ public class DoubleLinkedList {
     public Node[] getList(){
         List<Node> li = new ArrayList<>();
         Node temp = this.head;
-        li.add(temp);
-        while (temp.next != this.head)
-        {
-            temp = temp.next;
+        if (temp !=null) {
             li.add(temp);
+            while (temp.next != this.head)
+            {
+                temp = temp.next;
+                li.add(temp);
+            }
         }
         Node[] nodes = new Node[li.size()];
         nodes = li.toArray(nodes);
