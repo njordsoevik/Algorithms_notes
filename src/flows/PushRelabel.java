@@ -21,49 +21,50 @@ public class PushRelabel {
     LinkedList<Edge> es = g.getEdges(0);
     push(g,0);
     push(g,0);
-    relabel(g,2);
-    push(g,2);
-    relabel(g,1);
-    push(g,1);
+//    relabel(g,2);
+//    push(g,2);
+//    relabel(g,2);
+//    push(g,2);
+//    System.out.println(findExcessVertex(g));
+//    relabel(g,1);
+//    push(g,1);
 
-    System.out.println(g);
-//
-//    // Check adjacent from source for excess
-//    int u = findExcessVertex(g);
-//    while (u != -1) {
-//      Vertex vPushVertex = g.getVertex(u);
-//      // Check any outgoing edges
-//      if (!push(g, u)) {
-//        relabel(g, u);
-//      }
-//      break;
-//    }
+    int u = findExcessVertex(g);
+    int count = 0;
+    while (u != -1) {
+      count ++;
+      System.out.println("Excess: " + u);
+      System.out.println(g);
+      if (!push(g, u)) {
+        System.out.println("Relabel" + u);
+        relabel(g, u);
+      }
+      if (count == 19) {
+        break;
+      }
+      u = findExcessVertex(g);
+    }
   }
 
   private static void relabel(AdjacencyList g, int u) {
     // RELABEL
     // Check all heights, if less than all, increase to min + 1
     int minHeight = Integer.MAX_VALUE;
-    boolean relabel = true;
     LinkedList<Edge> edges = g.getEdges(u);
     Vertex relabelVertex = g.getVertex(u);
 
     for (int i = 0; i < edges.size(); i++) {
-      Vertex destination = g.getVertex(edges.get(i).getDestination());
-      if (destination.getHeight() >= relabelVertex.getHeight()) {
+      Edge e = edges.get(i);
+      Vertex destination = g.getVertex(e.getDestination());
+      if (destination.getHeight() >= relabelVertex.getHeight() && e.getFlow() < e.getCapacity()) {
         minHeight = Math.min(destination.getHeight(), minHeight);
-      } else {
-        relabel = false;
       }
     }
-    if (relabel) {
-      // Relabel
       relabelVertex.setHeight(minHeight + 1);
-    }
   }
 
   private static int findExcessVertex(AdjacencyList g) {
-    for (int i = g.getSize() - 1; i >= 0; i--) {
+    for (int i = g.getSize() - 2; i >= 0; i--) {
       if (g.getVertex(i).getExcess() > 0) {
         return i;
       }
@@ -75,7 +76,6 @@ public class PushRelabel {
   private static boolean push(AdjacencyList g, int u) {
 
     LinkedList<Edge> edges = g.getEdges(u);
-    boolean push = false;
 
     // PUSH
     for (int i = 0; i < edges.size(); i++) {
@@ -92,7 +92,9 @@ public class PushRelabel {
           int flowDifference = value - e.getFlow();
 
           source.setExcess(source.getExcess() - flowDifference);
-          dest.setExcess(dest.getExcess() + flowDifference);
+          if (dest.getIndex() != 0) {
+            dest.setExcess(dest.getExcess() + flowDifference);
+          }
           e.setFlow(value);
           return true;
         }
