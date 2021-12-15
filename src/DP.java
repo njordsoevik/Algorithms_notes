@@ -96,7 +96,7 @@ public class DP {
         // loop through p lengths
         for (int z=2;z<p.length();z++) {
             String x1 = p.substring(0,z);
-            String x2 = p.substring(z,p.length());
+            String x2 = p.substring(z);
             best = Integer.MAX_VALUE*(-1);
             for (int i=1;i<z;i++) {
                 best_i = 0;

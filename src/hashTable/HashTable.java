@@ -8,8 +8,8 @@ import java.util.Scanner;
 
 public class HashTable {
 
-  private LinkedListHash[] p;
-  private Integer size;
+  private final LinkedListHash[] p;
+  private final Integer size;
 
   public HashTable(Integer size) {
     p = new LinkedListHash[size];

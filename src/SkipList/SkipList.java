@@ -11,7 +11,7 @@ public class SkipList {
   private final int NEG_INF = Integer.MIN_VALUE;
   private final int POS_INF = Integer.MAX_VALUE;
   private int height;
-  private Random rand;
+  private final Random rand;
   private int length;
 
   public SkipList() {

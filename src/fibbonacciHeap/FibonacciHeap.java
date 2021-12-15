@@ -63,9 +63,9 @@ public class FibonacciHeap {
     }
 
     private void consolidate() {
-        // double golden = (1+Math.sqrt(5)) /2;
-        // int dn = (int) Math.floor(Math.log(this.hnodes) / Math.log(golden));
-        Node[] a = new Node[100];
+        double golden = (1+Math.sqrt(5)) /2;
+        int dn = (int) Math.floor(Math.log(this.n) / Math.log(golden));
+        Node[] a = new Node[dn];
 
         Node[] holding = rootList.getList();
         for (Node w:holding) {
@@ -75,7 +75,6 @@ public class FibonacciHeap {
             while (a[d]!=null){
                 Node y = a[d];
                 if (x.data > y.data) {
-                    //rootList.swap(x,y);
                     Node temp = x;
                     x = y;
                     y = temp;
@@ -213,8 +212,7 @@ public class FibonacciHeap {
     }
 
     public static void main(String[] args) {
-                FibonacciHeap f3 = new FibonacciHeap();
-
+        FibonacciHeap f3 = new FibonacciHeap();
         f3.insert(new Node(32));
         Node p = new Node(190);
         f3.insert(p);
@@ -223,6 +221,7 @@ public class FibonacciHeap {
         Node p2 = new Node(122);
         f3.insert(p2);
         f3.insert(new Node(12));
+
         System.out.println("---- ORIGINAL ----");
         System.out.println(f3);
 
