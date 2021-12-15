@@ -209,10 +209,12 @@ public class SkipList {
     s.insert(3);
     System.out.println(s);
     s.remove(6);
+    System.out.println("\n");
     System.out.println(s);
     s.insert(24);
+    System.out.println("\n");
     System.out.println(s);
-    System.out.println(s.search(3));
+//    System.out.println(s.search(3));
   }
 
 

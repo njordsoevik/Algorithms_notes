@@ -19,6 +19,7 @@ public class AdjacencyList {
 
     public void addEdge(int capacity, int source, int destination) {
         adjLists[source].add(new Edge(capacity, source, destination));
+        //adjLists[source].add(new Edge(capacity, destination, source));
     }
 
     public Vertex getVertex(int index) {

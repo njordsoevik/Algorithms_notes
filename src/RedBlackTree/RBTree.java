@@ -223,17 +223,17 @@ public class RBTree {
     return s;
   }
 
-  public Node successor(int key) {
+  public Node successor(int data) {
     Node r = root;
     Node s = null;
     if (r == null) {
       return null;
     }
     while (true) {
-      if (key < r.key) {
+      if (data < r.key) {
         s = r;
         r = r.left;
-      } else if (key > r.key) {
+      } else if (data > r.key) {
         r = r.right;
       } else {
         Node right = r.right;
@@ -302,7 +302,6 @@ public class RBTree {
     }
   }
 
-
   public void printTree() {
     Node x = root;
     printTreeHelper(x, "");
@@ -316,7 +315,6 @@ public class RBTree {
     } else {
       c = "B";
     }
-
     System.out.println(prefix + " -- " + node.key + c);
     printTreeHelper(node.right, prefix + "       ");
     printTreeHelper(node.left, prefix + "       ");
