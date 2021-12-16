@@ -5,16 +5,46 @@ import java.util.LinkedList;
 public class PushRelabel {
 
   public static void main(String[] args) {
-    int numberVertices = 4;
+    int numberVertices;
+    AdjacencyList g;
+    // EX 1
+//    numberVertices = 4;
+//
+//    g = new AdjacencyList(numberVertices);
+//    g.addEdge(13, 0, 1);
+//    g.addEdge(10, 0, 2);
+//    g.addEdge(3, 1, 3);
+//    g.addEdge(6, 2, 3);
+//
+//    g.getVertex(0).setHeight(numberVertices);
+//
+//    // EX 2
+//    numberVertices = 4;
+//
+//    g = new AdjacencyList(numberVertices);
+//    g.addEdge(13, 0, 1);
+//    g.addEdge(4, 1, 2);
+//    g.addEdge(10, 0, 2);
+//    g.addEdge(3, 1, 3);
+//    g.addEdge(6, 2, 3);
+//
+//    g.getVertex(0).setHeight(numberVertices);
 
-    AdjacencyList g = new AdjacencyList(numberVertices);
+    // EX 3
+    numberVertices = 5;
+
+    g = new AdjacencyList(numberVertices);
     g.addEdge(13, 0, 1);
     g.addEdge(4, 1, 2);
     g.addEdge(10, 0, 2);
     g.addEdge(3, 1, 3);
     g.addEdge(6, 2, 3);
+    g.addEdge(5, 3, 4);
 
     g.getVertex(0).setHeight(numberVertices);
+
+
+
     //g.getVertex(0).setExcess(23);
 
     // Max flow from source
@@ -34,18 +64,13 @@ public class PushRelabel {
     }
 
     int u = findExcessVertex(g);
-    int count = 0;
     while (u != -1) {
-      count ++;
       System.out.println("Excess vertex picked: " + u);
       if (!push(g, u)) {
         System.out.println("Relabeling" + u);
         relabel(g, u);
       }
       System.out.println(g);
-      if (count == 200) {
-        break;
-      }
       u = findExcessVertex(g);
     }
     System.out.println(g);
