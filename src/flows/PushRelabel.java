@@ -15,22 +15,34 @@ public class PushRelabel {
     g.addEdge(6, 2, 3);
 
     g.getVertex(0).setHeight(numberVertices);
-    g.getVertex(0).setExcess(23);
+    //g.getVertex(0).setExcess(23);
 
     // Max flow from source
-    push(g,0);
-    push(g,0);
+    //push(g,0);
+    //push(g,0);
+
+
+    LinkedList<Edge> es = g.getEdges(0);
+    for (int i = 0; i<es.size();i++) {
+      Edge e = es.get(i);
+      // Set flow to capacity
+      e.setFlow(e.getCapacity());
+      // Set inverse flow to capacity
+      g.getInverse(e).setFlow((-1)*e.getCapacity());
+      // Set destination excess to capacity
+      g.getVertex(e.getDestination()).setExcess(e.getCapacity());
+    }
 
     int u = findExcessVertex(g);
     int count = 0;
     while (u != -1) {
       count ++;
-      System.out.println("Excess: " + u);
-      System.out.println(g);
+      System.out.println("Excess vertex picked: " + u);
       if (!push(g, u)) {
-        System.out.println("Relabel" + u);
+        System.out.println("Relabeling" + u);
         relabel(g, u);
       }
+      System.out.println(g);
       if (count == 200) {
         break;
       }
