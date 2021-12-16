@@ -5,29 +5,21 @@ import java.util.LinkedList;
 public class PushRelabel {
 
   public static void main(String[] args) {
-    AdjacencyList g = new AdjacencyList(6);
-    g.addEdge(13, 0, 1);
-    g.addEdge(10, 0, 2);
-    g.addEdge(3, 2, 1);
-    g.addEdge(6, 1, 3);
-    g.addEdge(7, 1, 5);
-    g.addEdge(10, 3, 4);
-    g.addEdge(5, 4, 5);
+    int numberVertices = 4;
 
-    g.getVertex(0).setHeight(6);
+    AdjacencyList g = new AdjacencyList(numberVertices);
+    g.addEdge(13, 0, 1);
+    g.addEdge(4, 1, 2);
+    g.addEdge(10, 0, 2);
+    g.addEdge(3, 1, 3);
+    g.addEdge(6, 2, 3);
+
+    g.getVertex(0).setHeight(numberVertices);
     g.getVertex(0).setExcess(23);
 
     // Max flow from source
-    LinkedList<Edge> es = g.getEdges(0);
     push(g,0);
     push(g,0);
-//    relabel(g,2);
-//    push(g,2);
-//    relabel(g,2);
-//    push(g,2);
-//    System.out.println(findExcessVertex(g));
-//    relabel(g,1);
-//    push(g,1);
 
     int u = findExcessVertex(g);
     int count = 0;
@@ -39,11 +31,12 @@ public class PushRelabel {
         System.out.println("Relabel" + u);
         relabel(g, u);
       }
-      if (count == 19) {
+      if (count == 200) {
         break;
       }
       u = findExcessVertex(g);
     }
+    System.out.println(g);
   }
 
   private static void relabel(AdjacencyList g, int u) {
@@ -64,7 +57,7 @@ public class PushRelabel {
   }
 
   private static int findExcessVertex(AdjacencyList g) {
-    for (int i = g.getSize() - 2; i >= 0; i--) {
+    for (int i = 0; i < g.getSize() - 1; i++) {
       if (g.getVertex(i).getExcess() > 0) {
         return i;
       }
@@ -74,7 +67,6 @@ public class PushRelabel {
 
 
   private static boolean push(AdjacencyList g, int u) {
-
     LinkedList<Edge> edges = g.getEdges(u);
 
     // PUSH
@@ -83,19 +75,22 @@ public class PushRelabel {
       // If there is extra capacity and excess, push
       if (g.getVertex(e.getDestination()).getHeight() < g.getVertex(e.getSource()).getHeight()) {
         if (e.getFlow() < e.getCapacity() && g.getVertex(e.getSource()).getExcess() > 0) {
+
+          // Value to increase flow
           int value = Math.min(g.getVertex(e.getSource()).getExcess(), e.getCapacity()-e.getFlow());
 
           Vertex source = g.getVertex(e.getSource());
           Vertex dest = g.getVertex(e.getDestination());
 
           // Get flow update difference
-          int flowDifference = value - e.getFlow();
 
-          source.setExcess(source.getExcess() - flowDifference);
+          source.setExcess(source.getExcess() - value);
           if (dest.getIndex() != 0) {
-            dest.setExcess(dest.getExcess() + flowDifference);
+            dest.setExcess(dest.getExcess() + value);
           }
-          e.setFlow(value);
+
+          g.getInverse(e).setFlow(g.getInverse(e).getFlow()-value);
+          e.setFlow(e.getFlow()+value);
           return true;
         }
       }

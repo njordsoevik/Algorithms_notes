@@ -22,6 +22,17 @@ public class AdjacencyList {
         adjLists[destination].add(new Edge(capacity, destination, source));
     }
 
+    public Edge getInverse(Edge e) {
+        int s = e.getSource();
+        int t = e.getDestination();
+        for (int i = 0 ; i< adjLists[t].size() ;i++) {
+            if (adjLists[t].get(i).getDestination()==s) {
+                return adjLists[t].get(i);
+            }
+        }
+        return null;
+    }
+
     public Vertex getVertex(int index) {
         return vertices[index];
     }
